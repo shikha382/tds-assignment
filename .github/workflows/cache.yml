@@ -2,33 +2,21 @@ name: Cache Dependencies
 
 on:
   push:
-  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Cache node modules
-        id: cache-node
+      - name: Cache dependencies
+        id: cache
         uses: actions/cache@v4
         with:
           path: ~/.npm
-          key: cache-8ca11d7-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            cache-8ca11d7-${{ runner.os }}-
-
-      - name: Install dependencies
-        run: npm install
+          key: cache-8ca11d7
 
       - name: prime-cache-8ca11d7
-        run: |
-          echo "Cache hit? -> ${{ steps.cache-node.outputs.cache-hit }}"
+        run: echo "Cache hit: ${{ steps.cache.outputs.cache-hit }}"
